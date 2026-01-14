@@ -19,14 +19,36 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update submodules
+      - name: Update submodule
         run: |
           git submodule update --remote --merge skills/anthropic
+
+      - name: Copy anthropic skills to skills directory
+        run: |
+          # Remove old copied skills (keep custom ones)
+          for dir in skills/anthropic/skills/*/; do
+            skill_name=$(basename "$dir")
+            if [ -d "skills/$skill_name" ] && [ ! -f "skills/$skill_name/.custom" ]; then
+              rm -rf "skills/$skill_name"
+            fi
+          done
+          
+          # Copy fresh skills from anthropic
+          for dir in skills/anthropic/skills/*/; do
+            skill_name=$(basename "$dir")
+            # Skip if custom skill exists with same name
+            if [ -f "skills/$skill_name/.custom" ]; then
+              echo "Skipping $skill_name (custom skill)"
+              continue
+            fi
+            cp -r "$dir" "skills/$skill_name"
+            echo "Copied $skill_name"
+          done
 
       - name: Check for changes
         id: changes
         run: |
-          if git diff --quiet; then
+          if git diff --quiet && git diff --cached --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
@@ -37,6 +59,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add skills/anthropic
-          git commit -m "chore: sync anthropic/skills to latest"
+          git add .
+          git commit -m "chore: sync anthropic skills to latest"
           git push
