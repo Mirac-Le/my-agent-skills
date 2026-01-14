@@ -1,9 +1,9 @@
 name: Sync Anthropic Skills
 
 on:
-  # Run weekly on Monday at 00:00 UTC
+  # Run daily at 00:00 UTC
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * *'
   # Allow manual trigger
   workflow_dispatch:
 
