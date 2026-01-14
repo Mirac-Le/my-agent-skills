@@ -48,16 +48,21 @@ my-agent-skills/
 ├── .github/
 │   └── workflows/
 │       └── sync-submodules.yml  # Auto-sync anthropic/skills daily
-├── skills/                  # Custom skills
-│   ├── postgres-client/
+├── skills/
+│   ├── anthropic/           # Official Anthropic skills (submodule, auto-synced)
+│   │   └── skills/
+│   │       ├── docx/
+│   │       ├── pdf/
+│   │       ├── pptx/
+│   │       ├── xlsx/
+│   │       └── ...
+│   ├── postgres-client/     # Custom: PostgreSQL client patterns
 │   │   ├── SKILL.md
 │   │   └── references/
-│   ├── git-workflow/
+│   ├── git-workflow/        # Custom: Git workflow conventions
 │   │   └── SKILL.md
-│   └── coding-standards/
+│   └── coding-standards/    # Custom: Coding standards
 │       └── SKILL.md
-├── vendor/                  # Third-party skills (submodule)
-│   └── anthropic/           # anthropic/skills (auto-synced daily)
 ├── template/
 │   └── SKILL.md
 └── README.md
@@ -141,13 +146,13 @@ allowed-tools:                # Optional: restrict available tools
 
 ## 🔄 Auto-Sync with Anthropic Skills
 
-This repo includes `vendor/anthropic` as a Git submodule pointing to [anthropic/skills](https://github.com/anthropics/skills).
+This repo includes `skills/anthropic` as a Git submodule pointing to [anthropic/skills](https://github.com/anthropics/skills).
 
 - **Auto-sync**: GitHub Actions runs daily to pull latest updates
 - **Manual sync**: 
   ```bash
-  git submodule update --remote vendor/anthropic
-  git add vendor/anthropic
+  git submodule update --remote skills/anthropic
+  git add skills/anthropic
   git commit -m "chore: sync anthropic skills"
   git push
   ```
