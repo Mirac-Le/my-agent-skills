@@ -1,0 +1,13 @@
+{
+  "name": "my-agent-skills",
+  "version": "1.0.0",
+  "description": "Personal agent skills collection for development workflows, database patterns, and coding standards.",
+  "author": "Your Name",
+  "homepage": "https://github.com/Mirac-Le/my-agent-skills",
+  "license": "MIT",
+  "skills": [
+    "skills/postgres-client",
+    "skills/git-workflow",
+    "skills/coding-standards"
+  ]
+}
