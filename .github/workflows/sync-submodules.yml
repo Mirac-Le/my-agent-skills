@@ -23,15 +23,15 @@ jobs:
         run: |
           git submodule update --remote --merge .anthropic-source
 
-      - name: Copy anthropic skills to skills/anthropic directory
+      - name: Copy anthropic skills to skills/nerd directory
         run: |
-          mkdir -p skills/anthropic
+          mkdir -p skills/nerd
           
           # Copy fresh skills from anthropic (overwrite)
           for dir in .anthropic-source/skills/*/; do
             skill_name=$(basename "$dir")
-            rm -rf "skills/anthropic/$skill_name"
-            cp -r "$dir" "skills/anthropic/$skill_name"
+            rm -rf "skills/nerd/$skill_name"
+            cp -r "$dir" "skills/nerd/$skill_name"
             echo "Copied $skill_name"
           done
 
