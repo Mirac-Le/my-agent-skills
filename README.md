@@ -10,36 +10,34 @@ Personal Agent Skills collection for reusable development workflows, database pa
 | `git-workflow` | Git workflow conventions | Conventional Commits, PR workflow |
 | `coding-standards` | Coding standards and interaction preferences | Code style, debugging, review priorities |
 
-## 🚀 Installation
+## 🚀 Quick Start (Cursor + openskills)
 
-### Option 1: Claude Code Plugin (Recommended)
-
-```bash
-# Add as Plugin Marketplace
-/plugin marketplace add Mirac-Le/my-agent-skills
-
-# Install
-/plugin install my-agent-skills@Mirac-Le
-```
-
-### Option 2: Copy to Project
+### 1. Install openskills
 
 ```bash
-# Clone repository
-git clone https://github.com/Mirac-Le/my-agent-skills.git
-
-# Copy required skills to your project
-cp -r my-agent-skills/skills/postgres-client your-project/.claude/skills/
+npm i -g openskills
 ```
 
-### Option 3: Git Submodule
+### 2. Install Skills to Your Project
 
 ```bash
-# Add as submodule in your project
-git submodule add https://github.com/Mirac-Le/my-agent-skills.git .claude/vendor/my-skills
+cd your-project
 
-# Reference in AGENTS.md
+# Install from this repo
+openskills install Mirac-Le/my-agent-skills
+
+# Or install official Anthropic skills
+openskills install anthropics/skills
 ```
+
+### 3. Sync to AGENTS.md
+
+```bash
+# Update AGENTS.md with installed skills
+openskills sync
+```
+
+Now Cursor's Claude can use the installed skills automatically!
 
 ## 📁 Directory Structure
 
@@ -47,31 +45,51 @@ git submodule add https://github.com/Mirac-Le/my-agent-skills.git .claude/vendor
 my-agent-skills/
 ├── .claude-plugin/
 │   └── plugin.json          # Claude Code Plugin config
-├── skills/
-│   ├── postgres-client/     # PostgreSQL client patterns
+├── .github/
+│   └── workflows/
+│       └── sync-submodules.yml  # Auto-sync anthropic/skills daily
+├── skills/                  # Custom skills
+│   ├── postgres-client/
 │   │   ├── SKILL.md
 │   │   └── references/
-│   ├── git-workflow/        # Git workflow
+│   ├── git-workflow/
 │   │   └── SKILL.md
-│   └── coding-standards/    # Coding standards
+│   └── coding-standards/
 │       └── SKILL.md
-├── vendor/                  # Third-party skills (optional)
-│   └── anthropic/           # anthropic/skills submodule
-├── template/                # Skill template
+├── vendor/                  # Third-party skills (submodule)
+│   └── anthropic/           # anthropic/skills (auto-synced daily)
+├── template/
 │   └── SKILL.md
 └── README.md
 ```
 
-## 🔄 Sync with Anthropic Official Skills
+## 🔄 Alternative Installation Methods
 
-To use skills from [anthropic/skills](https://github.com/anthropics/skills):
+### Option 1: Git Submodule
 
 ```bash
-# Add as submodule
-git submodule add https://github.com/anthropics/skills.git vendor/anthropic
+cd your-project
 
-# Update to latest
-git submodule update --remote vendor/anthropic
+# Add as submodule
+git submodule add git@github.com:Mirac-Le/my-agent-skills.git .claude/vendor/my-skills
+
+# Link specific skills
+ln -s vendor/my-skills/skills/postgres-client .claude/skills/postgres-client
+```
+
+### Option 2: Direct Copy
+
+```bash
+# Clone and copy what you need
+git clone git@github.com:Mirac-Le/my-agent-skills.git /tmp/my-skills
+cp -r /tmp/my-skills/skills/postgres-client your-project/.claude/skills/
+```
+
+### Option 3: Claude Code Plugin
+
+```bash
+/plugin marketplace add Mirac-Le/my-agent-skills
+/plugin install my-agent-skills@Mirac-Le
 ```
 
 ## ✨ Creating a New Skill
@@ -94,25 +112,12 @@ git submodule update --remote vendor/anthropic
    ...
    ```
 
-3. Update `.claude-plugin/plugin.json` to add the new skill path
-
-4. Commit and push
-
-## 🔧 Usage in Projects
-
-### Reference in AGENTS.md
-
-```xml
-<skill>
-<name>postgres-client</name>
-<description>High-performance PostgreSQL client patterns...</description>
-<location>https://github.com/Mirac-Le/my-agent-skills</location>
-</skill>
-```
-
-### Direct Copy to .claude/skills/
-
-Copy required skills to your project's `.claude/skills/` directory. They will be automatically recognized.
+3. Commit and push:
+   ```bash
+   git add .
+   git commit -m "feat: add my-new-skill"
+   git push
+   ```
 
 ## 📋 Skill Format Specification
 
@@ -133,6 +138,19 @@ allowed-tools:                # Optional: restrict available tools
 ## Instructions
 ...
 ```
+
+## 🔄 Auto-Sync with Anthropic Skills
+
+This repo includes `vendor/anthropic` as a Git submodule pointing to [anthropic/skills](https://github.com/anthropics/skills).
+
+- **Auto-sync**: GitHub Actions runs daily to pull latest updates
+- **Manual sync**: 
+  ```bash
+  git submodule update --remote vendor/anthropic
+  git add vendor/anthropic
+  git commit -m "chore: sync anthropic skills"
+  git push
+  ```
 
 ## 🤝 Contributing
 
