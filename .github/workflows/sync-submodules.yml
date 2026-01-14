@@ -27,15 +27,10 @@ jobs:
         run: |
           mkdir -p skills/anthropic
           
-          # Remove old copied skills
+          # Copy fresh skills from anthropic (overwrite)
           for dir in .anthropic-source/skills/*/; do
             skill_name=$(basename "$dir")
             rm -rf "skills/anthropic/$skill_name"
-          done
-          
-          # Copy fresh skills from anthropic
-          for dir in .anthropic-source/skills/*/; do
-            skill_name=$(basename "$dir")
             cp -r "$dir" "skills/anthropic/$skill_name"
             echo "Copied $skill_name"
           done
