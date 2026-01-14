@@ -30,7 +30,7 @@ Done! Cursor's Claude can now use all skills.
 | `git-workflow` | Git conventions (Conventional Commits, PR workflow) |
 | `coding-standards` | Coding standards and interaction preferences |
 
-### Official Anthropic Skills (auto-synced daily)
+### Official Anthropic Skills (in `skills/anthropic/`, auto-synced daily)
 
 | Skill | Description |
 |-------|-------------|
@@ -48,16 +48,17 @@ Done! Cursor's Claude can now use all skills.
 
 ```
 my-agent-skills/
+├── .anthropic-source/       # Submodule (hidden, for CI sync)
 ├── skills/
 │   ├── postgres-client/     # Custom (marked with .custom)
 │   ├── git-workflow/        # Custom
 │   ├── coding-standards/    # Custom
-│   ├── docx/                # From anthropic/skills
-│   ├── pdf/                 # From anthropic/skills
-│   ├── pptx/                # From anthropic/skills
-│   ├── xlsx/                # From anthropic/skills
-│   ├── ...                  # More official skills
-│   └── anthropic/           # Submodule (source)
+│   └── anthropic/           # Official Anthropic skills
+│       ├── docx/
+│       ├── pdf/
+│       ├── pptx/
+│       ├── xlsx/
+│       └── ...
 └── .github/workflows/
     └── sync-submodules.yml  # Auto-sync daily
 ```
@@ -65,16 +66,15 @@ my-agent-skills/
 ## 🔄 Auto-Sync
 
 GitHub Actions automatically syncs official Anthropic skills daily:
-- Updates `skills/anthropic` submodule
-- Copies new/updated skills to `skills/` directory
-- Custom skills (with `.custom` marker) are preserved
+- Updates `.anthropic-source` submodule
+- Copies new/updated skills to `skills/anthropic/` directory
 
 ## ✨ Creating a New Custom Skill
 
 1. Create skill directory:
    ```bash
    mkdir skills/my-new-skill
-   touch skills/my-new-skill/.custom  # Mark as custom
+   touch skills/my-new-skill/.custom  # Mark as custom (won't be overwritten)
    ```
 
 2. Create `skills/my-new-skill/SKILL.md`:

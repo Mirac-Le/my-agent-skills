@@ -23,25 +23,20 @@ jobs:
         run: |
           git submodule update --remote --merge .anthropic-source
 
-      - name: Copy anthropic skills to skills directory
+      - name: Copy anthropic skills to skills/anthropic directory
         run: |
-          # Remove old copied skills (keep custom ones)
+          mkdir -p skills/anthropic
+          
+          # Remove old copied skills
           for dir in .anthropic-source/skills/*/; do
             skill_name=$(basename "$dir")
-            if [ -d "skills/$skill_name" ] && [ ! -f "skills/$skill_name/.custom" ]; then
-              rm -rf "skills/$skill_name"
-            fi
+            rm -rf "skills/anthropic/$skill_name"
           done
           
           # Copy fresh skills from anthropic
           for dir in .anthropic-source/skills/*/; do
             skill_name=$(basename "$dir")
-            # Skip if custom skill exists with same name
-            if [ -f "skills/$skill_name/.custom" ]; then
-              echo "Skipping $skill_name (custom skill)"
-              continue
-            fi
-            cp -r "$dir" "skills/$skill_name"
+            cp -r "$dir" "skills/anthropic/$skill_name"
             echo "Copied $skill_name"
           done
 
